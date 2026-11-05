@@ -1,0 +1,158 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Kred demo v1</title>
+<style>
+@font-face{font-family:Geist;src:url(node_modules/@fontsource/geist/files/geist-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:Geist;src:url(node_modules/@fontsource/geist/files/geist-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:Geist;src:url(node_modules/@fontsource/geist/files/geist-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#eef0f0;font-family:Geist,sans-serif;color:#0f1a1a}
+.abs{position:absolute;left:0;top:0}
+canvas{position:absolute;left:0;top:0}
+.world{position:absolute;left:0;top:0;width:1286px;transform-origin:0 0;backface-visibility:hidden}
+.world img{position:absolute;display:block}
+.card{position:absolute;left:0;top:0;width:1286px;overflow:hidden;border-radius:14px;background:#f4f4f7;box-shadow:0 0 0 1px rgba(6,52,50,.07),0 2px 6px rgba(6,52,50,.05),0 24px 60px rgba(6,52,50,.10),0 60px 140px rgba(6,52,50,.10)}
+.st{left:0;top:0;width:1286px;height:835px}
+.patch{position:absolute}
+svg.ov{position:absolute;left:0;top:0;overflow:visible}
+.modal{position:absolute;transform-origin:50% 50%;border-radius:12px;box-shadow:0 0 0 1px rgba(6,40,40,.04),0 4px 12px rgba(6,40,40,.07),0 28px 70px rgba(6,40,40,.16)}
+.modal img{left:0;top:0}
+.sweep{position:absolute;overflow:hidden;display:none}
+.sweep i{position:absolute;top:-20%;height:140%;width:110px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.35),rgba(255,255,255,0));transform:skewX(-20deg)}
+.head{position:absolute;left:0;width:1920px;text-align:center;font-weight:600;letter-spacing:-0.035em;line-height:1.04;transform-origin:960px 50%;will-change:transform;color:#0f1a1a}
+.head span{display:inline-block;margin:0 .055em}
+#wash{position:absolute;inset:0;background:#f6f7f7;opacity:0}
+.rowimg{position:absolute;left:0;width:1286px}
+.ring{position:absolute;border-radius:10px;box-shadow:0 0 0 1.5px rgba(6,90,88,.55),0 0 0 6px rgba(6,90,88,.08),0 8px 24px rgba(6,90,88,.18);opacity:0}
+.hovrow{position:absolute;border-radius:12px;opacity:0;box-shadow:0 0 0 1px rgba(6,90,88,.28),0 14px 34px rgba(6,52,50,.14)}
+.chip{position:absolute;height:84px;border-radius:42px;background:rgba(255,255,255,.92);box-shadow:0 0 0 1px rgba(6,52,50,.07),0 10px 30px rgba(6,52,50,.09);display:flex;align-items:center;gap:16px;padding:0 34px 0 22px;font-size:27px;font-weight:500;letter-spacing:-0.015em;white-space:nowrap;color:#0f1a1a;transform-origin:50% 50%}
+.chip .ic{width:46px;height:46px;border-radius:50%;background:#e3f1ef;display:flex;align-items:center;justify-content:center}
+#url{position:absolute;left:0;width:1920px;text-align:center}
+#url span{display:inline-block;padding:14px 30px;border-radius:40px;background:#065a58;color:#fff;font-size:28px;font-weight:500;letter-spacing:-0.01em;box-shadow:0 12px 30px rgba(6,90,88,.25)}
+</style></head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="2200" height="1260" style="left:-140px;top:-90px"></canvas>
+
+  <!-- A · Mint KUSD -->
+  <div id="wA" class="world" style="height:835px">
+    <div class="card" style="height:835px">
+      <img class="st" src="assets/x2/m0.png">
+      <img class="st" id="a1" src="assets/x2/m1.png">
+      <img class="st" id="a3" src="assets/x2/m3.png">
+      <img class="st" id="a4" src="assets/x2/m4.png">
+      <div class="patch" id="aPatch" style="left:476px;top:343px;width:150px;height:34px;background:rgb(245,248,248)"></div>
+      <svg class="ov" width="1286" height="835"><text id="aAmt" x="480" y="369.75" style="font:400 24.625px Geist;fill:#1a1a1a"></text><rect id="aCaret" x="0" y="349" width="1.6" height="25" fill="#065a58"/></svg>
+      <div class="sweep" id="aShine" style="left:392px;top:609.5px;width:502px;height:48px;border-radius:7px"><i></i></div>
+      <img class="st" id="aBlur" src="assets/x2/mblur.png">
+      <div class="modal" id="aMod" style="left:368px;top:282px;width:550px;height:272px">
+        <img src="assets/mMod1_c.png" style="width:550px;height:272px">
+        <img id="aMod2" src="assets/mMod2_c.png" style="width:550px;height:272px">
+        <img id="aMod3" src="assets/mMod3_c.png" style="width:550px;height:272px">
+        <svg class="ov" width="550" height="272">
+          <circle cx="500" cy="180" r="12.5" fill="#fff"/><circle cx="500" cy="232" r="12.5" fill="#fff"/>
+          <g id="aSp1" transform="translate(500 180)"><circle r="8" fill="none" stroke="rgba(7,90,90,.14)" stroke-width="2"/><path d="M0 -8 A8 8 0 0 1 8 0" fill="none" stroke="#075a5a" stroke-width="2" stroke-linecap="round"/></g>
+          <g id="aCk1" transform="translate(500 180)"><circle r="9.5" fill="#075a5a"/><path d="M-4.2 0.2 L-1.3 3.1 L4.3 -2.7" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g id="aSp2" transform="translate(500 232)"><circle r="8" fill="none" stroke="rgba(7,90,90,.14)" stroke-width="2"/><path d="M0 -8 A8 8 0 0 1 8 0" fill="none" stroke="#075a5a" stroke-width="2" stroke-linecap="round"/></g>
+          <g id="aCk2" transform="translate(500 232)"><circle r="9.5" fill="#075a5a"/><path d="M-4.2 0.2 L-1.3 3.1 L4.3 -2.7" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+        </svg>
+      </div>
+      <div class="modal" id="aOk" style="left:368px;top:227px;width:550px;height:382px">
+        <img src="assets/mOk_fix.png" style="width:550px;height:382px">
+        <div class="patch" id="aOkHov" style="left:400px;top:283px;width:102px;height:34px;border-radius:7px;background:rgba(255,255,255,.14);opacity:0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B · Stake KUSD -->
+  <div id="wB" class="world" style="height:835px">
+    <div class="card" style="height:835px">
+      <img class="st" src="assets/x2/s0.png">
+      <img class="st" id="b1" src="assets/x2/s1.png">
+      <img class="st" id="b3" src="assets/x2/s2.png">
+      <img class="st" id="b4" src="assets/x2/s3.png">
+      <img class="st" id="b10" src="assets/x2/s10.png">
+      <div class="patch" id="bPatch" style="left:476px;top:413px;width:150px;height:34px;background:rgb(245,248,248)"></div>
+      <svg class="ov" width="1286" height="835"><text id="bAmt" x="480" y="439.25" style="font:400 24.625px Geist;fill:#1a1a1a"></text><rect id="bCaret" x="0" y="418.5" width="1.6" height="25" fill="#065a58"/></svg>
+      <div class="sweep" id="bShine" style="left:392px;top:643px;width:502px;height:48px;border-radius:7px"><i></i></div>
+      <div id="bRing" class="ring" style="left:862px;top:234px;width:64px;height:36px"></div>
+      <img class="st" id="bBlur" src="assets/x2/sblur.png">
+      <div class="modal" id="bMod" style="left:368px;top:282px;width:550px;height:272px">
+        <img src="assets/sMod1_c.png" style="width:550px;height:272px">
+        <img id="bMod2" src="assets/sMod2_c.png" style="width:550px;height:272px">
+        <img id="bMod3" src="assets/sMod3_c.png" style="width:550px;height:272px">
+        <svg class="ov" width="550" height="272">
+          <circle cx="500" cy="180" r="12.5" fill="#fff"/><circle cx="500" cy="232" r="12.5" fill="#fff"/>
+          <g id="bSp1" transform="translate(500 180)"><circle r="8" fill="none" stroke="rgba(7,90,90,.14)" stroke-width="2"/><path d="M0 -8 A8 8 0 0 1 8 0" fill="none" stroke="#075a5a" stroke-width="2" stroke-linecap="round"/></g>
+          <g id="bCk1" transform="translate(500 180)"><circle r="9.5" fill="#075a5a"/><path d="M-4.2 0.2 L-1.3 3.1 L4.3 -2.7" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g id="bSp2" transform="translate(500 232)"><circle r="8" fill="none" stroke="rgba(7,90,90,.14)" stroke-width="2"/><path d="M0 -8 A8 8 0 0 1 8 0" fill="none" stroke="#075a5a" stroke-width="2" stroke-linecap="round"/></g>
+          <g id="bCk2" transform="translate(500 232)"><circle r="9.5" fill="#075a5a"/><path d="M-4.2 0.2 L-1.3 3.1 L4.3 -2.7" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></g>
+        </svg>
+      </div>
+      <div class="modal" id="bOk" style="left:368px;top:269px;width:550px;height:298px">
+        <img src="assets/sOk_c.png" style="width:550px;height:298px">
+      </div>
+    </div>
+  </div>
+
+  <!-- C · Deals -->
+  <div id="wC" class="world" style="height:1365px">
+    <div class="card" style="height:1365px">
+      <img src="assets/deals_base.png" style="left:0;top:0;width:1286px;height:1365.33px">
+      <div id="cRows"></div>
+      <div id="cHov" class="hovrow" style="left:30px;top:441.3px;width:1225px;height:78px"></div>
+      <div class="patch" style="left:44px;top:274px;width:24px;height:24px;background:rgb(253,253,253)"></div>
+      <div class="patch" style="left:355px;top:274px;width:110px;height:24px;background:rgb(253,253,253)"></div>
+      <div class="patch" style="left:666px;top:274px;width:70px;height:24px;background:rgb(253,253,253)"></div>
+      <div class="patch" style="left:979px;top:274px;width:88px;height:24px;background:rgb(253,253,253)"></div>
+      <svg class="ov" width="1286" height="1365" style="font:500 16px Geist;fill:#131313">
+        <text id="cS0" x="46" y="291"></text><text id="cS1" x="358" y="291"></text><text id="cS2" x="670.33" y="291"></text><text id="cS3" x="982" y="291"></text>
+      </svg>
+      <div class="sweep" id="cShine" style="left:878px;top:458px;width:100px;height:46px;border-radius:8px"><i style="background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85),rgba(255,255,255,0))"></i></div>
+    </div>
+  </div>
+
+  <!-- D · Dashboard -->
+  <div id="wD" class="world" style="height:1255px">
+    <div class="card" style="height:1255px">
+      <img src="assets/dash_base.png" style="left:0;top:0;width:1286px;height:1255.33px">
+      <div id="dRows"></div>
+      <div id="dHov" class="hovrow" style="left:30px;top:523.3px;width:1226px;height:78px"></div>
+      <div class="patch" style="left:52px;top:280px;width:170px;height:26px;background:#fff"></div>
+      <div class="patch" style="left:690px;top:280px;width:52px;height:26px;background:#fff"></div>
+      <svg class="ov" width="1286" height="1255">
+        <text id="dLiq" x="54.33" y="299.67" style="font:400 20px Geist;fill:#1a1a1a"></text>
+        <text id="dApy" x="693" y="299.67" style="font:500 20px Geist;fill:rgb(13,158,117)"></text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- screen space -->
+  <div id="glow" class="abs" style="width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(202,66,39,.10) 0%,rgba(6,90,88,.07) 40%,rgba(0,0,0,0) 70%);opacity:0"></div>
+  <svg id="logo" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080" style="overflow:visible">
+    <defs>
+      <linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop id="g0" offset="0" stop-color="#fff" stop-opacity="0"/><stop id="g1" offset=".1" stop-color="#fff" stop-opacity=".7"/><stop id="g2" offset=".2" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <clipPath id="wclip"><rect id="wclipR" x="30" y="0" width="0" height="40"/></clipPath>
+    </defs>
+    <g id="gMark"></g><g id="gWord" clip-path="url(#wclip)"></g>
+  </svg>
+  <div id="by" class="head" style="font-weight:500;font-size:30px;letter-spacing:0;color:rgba(15,26,26,.55);opacity:0">by KernelDAO</div>
+  <div id="h1" class="head" style="top:425px;font-size:100px"></div>
+  <div id="c0" class="head" style="top:478px;font-size:92px"></div>
+  <div id="c1" class="head" style="top:478px;font-size:92px"></div>
+  <div id="c2" class="head" style="top:478px;font-size:92px"></div>
+  <div id="c3" class="head" style="top:478px;font-size:100px"></div>
+  <div id="c4" class="head" style="top:330px;font-size:76px"></div>
+  <div id="chips"></div>
+  <div id="tagline" class="head" style="top:600px;font-size:58px;letter-spacing:-0.03em"></div>
+  <div id="url" style="top:706px;opacity:0"><span>kred.kerneldao.com</span></div>
+  <div id="cursor" class="abs" style="width:1px;height:1px">
+    <svg id="curArrow" class="abs" width="34" height="42" viewBox="0 0 18 22" style="left:-4px;top:-3px"><path d="M2 1.5L2 18.5L6.5 14.2L9.6 21L12.6 19.7L9.6 13H16L2 1.5Z" fill="#0f1a1a" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    <svg id="curHand" class="abs" width="34" height="40" viewBox="0 0 24 28" style="left:-12.4px;top:-2.6px;opacity:0"><path d="M8.8 2.2c-1.1 0-2 .9-2 2v9.4l-1.4-1.3c-.8-.8-2.1-.8-2.9 0s-.8 2.1 0 2.9l5.4 5.8c1.2 1.3 2.8 2 4.5 2h2.4c3.4 0 6.2-2.8 6.2-6.2v-4.6c0-1.1-.9-2-2-2-.4 0-.8.1-1.1.3-.2-.9-1-1.6-2-1.6-.5 0-1 .2-1.4.5-.3-.8-1-1.3-1.9-1.3-.4 0-.8.1-1.1.3V4.2c0-1.1-.9-2-2-2z" fill="#fff" stroke="#0f1a1a" stroke-width="1.25" stroke-linejoin="round"/><path d="M10.8 12.2v4.2M13.9 12.8v3.6M16.9 13.4v3" stroke="#0f1a1a" stroke-width="1.05" stroke-linecap="round"/></svg>
+  </div>
+  <div id="wash"></div>
+</div>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="node_modules/gsap/dist/CustomEase.min.js"></script>
+<script src="scene.js"></script>
+</body></html>

@@ -1,0 +1,15 @@
+{
+  "name": "kred-video",
+  "version": "1.0.0",
+  "private": true,
+  "main": "render.js",
+  "scripts": {
+    "serve": "python3 -m http.server 8131 --bind 127.0.0.1",
+    "render": "PAGE=index3.html node render.js video out/Kred_Demo_v3.mp4 60 0 40.7833"
+  },
+  "dependencies": {
+    "@fontsource/geist": "^5.3.0",
+    "gsap": "^3.12.5",
+    "sharp": "^0.33.5"
+  }
+}
